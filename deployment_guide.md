@@ -1,5 +1,17 @@
 # Deployment Guide
+# 🚀 Car Repair Invoice - Deployment Guide
 
+## Prerequisites
+- Python 3.8 or higher
+- Git installed
+- Streamlit Cloud account (free)
+
+## Local Development
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/syedkhizarali/car-invoice.git
+   cd car-invoice
+   
 ## Local Installation
 1. Install Python 3.8+
 2. Install dependencies: `pip install -r requirements.txt`
