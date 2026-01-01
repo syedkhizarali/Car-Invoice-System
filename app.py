@@ -11,85 +11,170 @@ import hashlib
 # ========================
 
 st.set_page_config(
-    page_title="Car Repair Invoice - Worker",
-    page_icon="🔧",
-    layout="wide"
+    page_title="AutoInvoice Pro - Car Repair Billing",
+    page_icon="🚗",
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
-# Simple styling with monogram
+# Professional Modern Styling
 st.markdown("""
 <style>
-    .big-button {
-        height: 60px;
-        font-size: 18px !important;
+    /* Main container styling */
+    .main {
+        padding: 0rem 1rem;
     }
-    .invoice-box {
-        border: 2px solid #4CAF50;
-        border-radius: 10px;
-        padding: 15px;
-        margin: 10px 0;
-        background-color: #f9f9f9;
+
+    /* Title styling */
+    .main-title {
+        text-align: center;
+        color: #2E4057;
+        padding-bottom: 1rem;
+        border-bottom: 3px solid #FF6B35;
+        margin-bottom: 2rem !important;
     }
+
+    /* Button styling */
+    .stButton > button {
+        border-radius: 8px;
+        border: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    /* Card styling */
+    .invoice-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border: 1px solid #E0E0E0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+    }
+
+    .invoice-card:hover {
+        box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    }
+
+    /* Stat cards */
     .stat-card {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
-        padding: 15px;
-        border-radius: 10px;
-        margin: 10px 0;
+        padding: 1.2rem;
+        border-radius: 12px;
+        margin: 0.8rem 0;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
     }
+
+    /* Profile card */
+    .profile-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.2rem;
+        margin: 0.8rem 0;
+        border: 1px solid #E0E0E0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    /* Input field styling */
+    .stTextInput > div > div > input,
+    .stNumberInput > div > div > input {
+        border-radius: 8px;
+        border: 1px solid #E0E0E0;
+    }
+
+    /* Sidebar styling */
+    section[data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+    }
+
+    /* WhatsApp button */
     .whatsapp-btn {
-        background-color: #25D366 !important;
+        background: linear-gradient(135deg, #25D366 0%, #128C7E 100%) !important;
         color: white !important;
         border: none !important;
-        padding: 10px 20px !important;
-        border-radius: 5px !important;
-        font-weight: bold !important;
+        padding: 12px 24px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        width: 100%;
+        text-align: center;
+        text-decoration: none;
+        display: block;
+        transition: all 0.3s ease;
     }
+
     .whatsapp-btn:hover {
-        background-color: #128C7E !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        color: white !important;
+        text-decoration: none !important;
     }
-    .user-info {
-        background: #f0f2f6;
-        padding: 10px;
-        border-radius: 5px;
-        margin-bottom: 10px;
-        font-size: 14px;
-    }
-    .monogram-container {
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        z-index: 1000;
-    }
-    .monogram {
-        display: flex;
-        align-items: center;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+    /* Badge styling */
+    .badge {
+        display: inline-block;
+        padding: 4px 12px;
+        background: #FF6B35;
         color: white;
-        padding: 8px 15px;
-        border-radius: 50px;
-        font-weight: bold;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-left: 8px;
     }
-    .monogram-icon {
-        font-size: 20px;
-        margin-right: 8px;
+
+    /* Section headers */
+    .section-header {
+        color: #2E4057;
+        border-left: 4px solid #FF6B35;
+        padding-left: 12px;
+        margin: 1.5rem 0 1rem 0;
     }
-    .main-title {
-        margin-top: 40px !important;
+
+    /* Item table */
+    .item-row {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 12px;
+        margin: 8px 0;
+        border-left: 3px solid #667eea;
     }
-    .profile-section {
-        background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
-        padding: 15px;
-        border-radius: 10px;
-        margin: 10px 0;
-        border: 1px solid #ddd;
+
+    /* Success message */
+    .success-box {
+        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        border: 1px solid #c3e6cb;
+        color: #155724;
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
     }
-    .profile-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
+
+    /* Warning/Info box */
+    .info-box {
+        background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+        border: 1px solid #bee5eb;
+        color: #0c5460;
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+    }
+
+    /* Hide Streamlit branding */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .main {
+            padding: 0.5rem;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -139,12 +224,13 @@ def get_default_profile():
     """Get default profile settings"""
     return {
         'workshop_name': 'Auto Care Workshop',
-        'phone_number': '+92-XXX-XXXXXXX',
-        'address': 'Your Workshop Address',
+        'phone_number': '+92-300-1234567',
+        'address': 'Main Road, Karachi',
         'email': '',
         'website': '',
-        'logo_text': '🔧 AUTO CARE',
-        'owner_name': ''
+        'owner_name': 'Your Name',
+        'tax_rate': 0,
+        'currency': 'PKR'
     }
 
 
@@ -227,7 +313,7 @@ def save_invoice_data(invoice_data):
 
 
 def get_today_statistics():
-    """Calculate today's statistics from saved invoices - FIXED: Only count labor as earnings"""
+    """Calculate today's statistics from saved invoices"""
     today = datetime.datetime.now().strftime("%Y-%m-%d")
     user_data_dir = get_user_data_dir()
     data_file = f"{user_data_dir}/invoices_{today}.json"
@@ -235,13 +321,13 @@ def get_today_statistics():
     # Default statistics
     stats = {
         'invoices_today': 0,
-        'earnings_today': 0,  # Now this will only count labor
-        'total_sales_today': 0,  # NEW: For total sales amount
+        'earnings_today': 0,
+        'total_sales_today': 0,
         'average_invoice': 0,
         'items_sold': 0,
         'recent_invoices': [],
-        'total_labor': 0,  # NEW: Total labor earnings
-        'user_id': USER_ID  # Include user ID for reference
+        'total_labor': 0,
+        'user_id': USER_ID
     }
 
     if not os.path.exists(data_file):
@@ -254,19 +340,15 @@ def get_today_statistics():
         if not invoices or not isinstance(invoices, list):
             return stats
 
-        # Calculate statistics - FIXED LOGIC
+        # Calculate statistics
         total_sales = 0
         total_items = 0
         total_labor_earnings = 0
 
         for inv in invoices:
             if isinstance(inv, dict):
-                # Total sales (parts + labor - discount)
                 total_sales += inv.get('grand_total', 0)
-
-                # Only labor counts as earnings (what the worker actually earns)
                 total_labor_earnings += inv.get('labor', 0)
-
                 total_items += len(inv.get('items', []))
 
         invoice_count = len(invoices)
@@ -277,8 +359,8 @@ def get_today_statistics():
 
         stats.update({
             'invoices_today': invoice_count,
-            'earnings_today': total_labor_earnings,  # FIXED: Only labor
-            'total_sales_today': total_sales,  # Total sales amount
+            'earnings_today': total_labor_earnings,
+            'total_sales_today': total_sales,
             'average_invoice': average_invoice,
             'items_sold': total_items,
             'recent_invoices': recent_invoices,
@@ -293,13 +375,13 @@ def get_today_statistics():
 
 
 def get_all_time_statistics():
-    """Get statistics from all time data - FIXED: Only count labor as earnings"""
+    """Get statistics from all time data"""
     user_data_dir = get_user_data_dir()
 
     stats = {
         'total_invoices': 0,
-        'total_earnings': 0,  # Only labor earnings
-        'total_sales': 0,  # Total sales amount
+        'total_earnings': 0,
+        'total_sales': 0,
         'days_active': 0,
         'average_daily': 0,
         'user_id': USER_ID
@@ -323,8 +405,8 @@ def get_all_time_statistics():
                             stats['total_invoices'] += len(invoices)
                             for inv in invoices:
                                 if isinstance(inv, dict):
-                                    stats['total_sales'] += inv.get('grand_total', 0)  # Total sales
-                                    stats['total_earnings'] += inv.get('labor', 0)  # Only labor earnings
+                                    stats['total_sales'] += inv.get('grand_total', 0)
+                                    stats['total_earnings'] += inv.get('labor', 0)
                 except:
                     pass
 
@@ -366,7 +448,7 @@ def save_user_invoice_counter(counter_value):
 
 
 def create_whatsapp_message(invoice_data):
-    """Create WhatsApp message template using user's profile"""
+    """Create WhatsApp message template"""
     customer = invoice_data['customer_name']
     car = invoice_data['car_details']
     invoice_num = invoice_data['invoice_number']
@@ -376,14 +458,14 @@ def create_whatsapp_message(invoice_data):
     message = f"""*Assalam-o-Alaikum!* 
 
 🚗 *Car Repair Invoice - {USER_PROFILE['workshop_name']}*
---------------------------------
+────────────────────────────
 *Customer:* {customer}
 *Car Details:* {car}
 *Invoice #:* {invoice_num}
 *Date:* {date}
-*Total Amount:* Rs {total:,}
+*Total Amount:* {USER_PROFILE['currency']} {total:,}
 
-Invoice PDF is attached.
+📄 Invoice PDF is attached.
 
 Thank you for choosing {USER_PROFILE['workshop_name']}!"""
 
@@ -391,7 +473,7 @@ Thank you for choosing {USER_PROFILE['workshop_name']}!"""
 
 
 # ========================
-# INITIALIZE SESSION STATE (User-Specific)
+# INITIALIZE SESSION STATE
 # ========================
 
 # Initialize with default values
@@ -403,7 +485,10 @@ defaults = {
     'discount': 0,
     'last_invoice_path': None,
     'last_invoice_data': None,
-    'show_profile_edit': False  # NEW: Control profile edit mode
+    'show_profile_edit': False,
+    'new_desc': "",  # FIX: Store new item description separately
+    'new_qty': 1,  # FIX: Store new item quantity
+    'new_price': 1000,  # FIX: Store new item price
 }
 
 for key, default_value in defaults.items():
@@ -418,608 +503,575 @@ if 'invoice_counter' not in st.session_state:
 # MAIN APP LAYOUT
 # ========================
 
-# Add monogram/logo at top left corner using user's profile
-st.markdown(f"""
-<div class="monogram-container">
-    <div class="monogram">
-        <span class="monogram-icon">🔧</span>
-        <span>{USER_PROFILE['logo_text']}</span>
-    </div>
+# Main title with professional design
+st.markdown("""
+<div class="main-title">
+    <h1 style="margin-bottom: 0.5rem;">🚗 AutoInvoice Pro</h1>
+    <p style="color: #666; font-size: 1.1rem; margin-top: 0;">Professional Car Repair Billing System</p>
 </div>
 """, unsafe_allow_html=True)
 
-# Main title with space for monogram
-st.markdown('<div class="main-title">', unsafe_allow_html=True)
-st.title(f"🔧 {USER_PROFILE['workshop_name']} - Invoice System")
-st.markdown('</div>', unsafe_allow_html=True)
+# Quick Stats Bar
+today_stats = get_today_statistics()
+col1, col2, col3, col4 = st.columns(4)
+with col1:
+    st.metric("📊 Invoices Today", today_stats['invoices_today'])
+with col2:
+    st.metric("💰 Earnings", f"Rs {today_stats['earnings_today']:,}")
+with col3:
+    st.metric("📈 Total Sales", f"Rs {today_stats['total_sales_today']:,}")
+with col4:
+    st.metric("🛠️ Items Sold", today_stats['items_sold'])
 
 st.markdown("---")
 
-# 1. QUICK START SECTION
-col1, col2, col3 = st.columns(3)
+# 1. QUICK ACTIONS SECTION
+st.markdown('<h3 class="section-header">Quick Actions</h3>', unsafe_allow_html=True)
+
+col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    if st.button("🆕 New Invoice", use_container_width=True, type="primary"):
+    if st.button("🆕 **New Invoice**", use_container_width=True, type="primary"):
         st.session_state.repair_items = []
         st.session_state.customer_name = ""
         st.session_state.car_details = ""
+        st.session_state.new_desc = ""
         st.rerun()
 
 with col2:
-    if st.button("💾 Save Draft", use_container_width=True):
-        st.success("Draft saved to your personal storage!")
+    if st.button("📋 **Recent Jobs**", use_container_width=True):
+        st.info(f"Showing last {len(today_stats['recent_invoices'])} invoices")
 
 with col3:
-    if st.button("📋 Recent Jobs", use_container_width=True):
-        st.info(f"Showing your last 5 invoices")
+    if st.button("⚙️ **Settings**", use_container_width=True):
+        st.session_state.show_profile_edit = True
+        st.rerun()
+
+with col4:
+    if st.button("🧹 **Clear All**", use_container_width=True):
+        st.session_state.repair_items = []
+        st.session_state.customer_name = ""
+        st.session_state.car_details = ""
+        st.session_state.labor = 1500
+        st.session_state.discount = 0
+        st.session_state.new_desc = ""
+        st.success("All fields cleared!")
+        st.rerun()
 
 st.markdown("---")
 
 # 2. CUSTOMER & CAR INFO
-st.subheader("1. Customer & Car Info")
+st.markdown('<h3 class="section-header">Customer & Vehicle Details</h3>', unsafe_allow_html=True)
 
-# Get customer and car info
-customer_name = st.text_input(
-    "Customer Name",
-    value=st.session_state.customer_name,
-    placeholder="John Ali"
-)
+col1, col2 = st.columns(2)
 
-car_details = st.text_input(
-    "Car Details",
-    value=st.session_state.car_details,
-    placeholder="Toyota Corolla 2018, White"
-)
+with col1:
+    customer_name = st.text_input(
+        "**Customer Name**",
+        value=st.session_state.customer_name,
+        placeholder="Enter customer name...",
+        key="customer_input"
+    )
+    st.session_state.customer_name = customer_name
 
-# Store in session state
-st.session_state.customer_name = customer_name
-st.session_state.car_details = car_details
+with col2:
+    car_details = st.text_input(
+        "**Vehicle Details**",
+        value=st.session_state.car_details,
+        placeholder="e.g., Toyota Corolla 2018, White, ABC-123",
+        key="car_input"
+    )
+    st.session_state.car_details = car_details
 
 st.markdown("---")
 
-# 3. REPAIR ITEMS
-st.subheader("2. Add Repair Work")
+# 3. REPAIR ITEMS SECTION (FIXED VERSION)
+st.markdown('<h3 class="section-header">Repair Items & Services</h3>', unsafe_allow_html=True)
 
-# Display existing items
+# Display current items in a nice card
 if st.session_state.repair_items:
-    st.markdown("**Current Items:**")
-
-    # Create a table-like display
+    st.markdown("### 📦 Current Items")
     for i, item in enumerate(st.session_state.repair_items):
-        col1, col2, col3, col4 = st.columns([3, 1, 1, 1])
-        with col1:
-            st.write(f"**{item['desc']}**")
-        with col2:
-            st.write(f"Qty: {item['qty']}")
-        with col3:
-            st.write(f"Rs {item['price']:,}")
-        with col4:
-            if st.button("❌ Remove", key=f"del_{i}"):
-                st.session_state.repair_items.pop(i)
-                st.rerun()
+        with st.container():
+            cols = st.columns([3, 1, 1, 1, 1])
+            with cols[0]:
+                st.markdown(f"**{item['desc']}**")
+            with cols[1]:
+                st.markdown(f"`Qty: {item['qty']}`")
+            with cols[2]:
+                st.markdown(f"`Price: Rs {item['price']:,}`")
+            with cols[3]:
+                st.markdown(f"`Total: Rs {item['total']:,}`")
+            with cols[4]:
+                if st.button("🗑️", key=f"remove_{i}", help="Remove item"):
+                    st.session_state.repair_items.pop(i)
+                    st.rerun()
+            st.divider()
 
-# Add new item
-st.markdown("#### Add New Repair Item:")
-new_col1, new_col2, new_col3, new_col4 = st.columns([3, 1, 1, 1])
+# Add new item - FIXED: Clear inputs after adding
+st.markdown("### ➕ Add New Item")
 
-with new_col1:
+col1, col2, col3, col4 = st.columns([3, 1, 1, 1])
+
+with col1:
     new_desc = st.text_input(
-        "What you fixed",
+        "Description",
+        value=st.session_state.new_desc,  # FIX: Use session state
+        placeholder="e.g., Brake pads replacement, AC repair...",
         label_visibility="collapsed",
-        placeholder="e.g., Changed brake pads, Fixed AC",
-        key="new_desc"
+        key="item_desc_input"
     )
 
-with new_col2:
+with col2:
     new_qty = st.number_input(
-        "Qty",
+        "Quantity",
         min_value=1,
-        value=1,
+        value=st.session_state.new_qty,
         label_visibility="collapsed",
-        key="new_qty"
+        key="item_qty_input"
     )
 
-with new_col3:
+with col3:
     new_price = st.number_input(
-        "Price",
+        "Price (Rs)",
         min_value=0,
-        value=1000,
+        value=st.session_state.new_price,
+        step=100,
         label_visibility="collapsed",
-        key="new_price"
+        key="item_price_input"
     )
 
-with new_col4:
-    if st.button("➕ Add", use_container_width=True, key="add_button"):
-        if new_desc:
+with col4:
+    st.write("")  # Spacing
+    st.write("")
+    if st.button("➕ **Add Item**", use_container_width=True, key="add_item_btn"):
+        if new_desc.strip():
             st.session_state.repair_items.append({
-                'desc': new_desc,
+                'desc': new_desc.strip(),
                 'qty': int(new_qty),
                 'price': float(new_price),
                 'total': float(new_qty) * float(new_price)
             })
+            # FIX: Clear the input fields
+            st.session_state.new_desc = ""
+            st.session_state.new_qty = 1
+            st.session_state.new_price = 1000
             st.rerun()
+        else:
+            st.warning("Please enter item description")
 
 st.markdown("---")
 
-# 4. QUICK CALCULATOR
-st.subheader("3. Quick Calculator")
+# 4. CALCULATIONS SECTION
+st.markdown('<h3 class="section-header">Invoice Calculation</h3>', unsafe_allow_html=True)
 
-# Labor and discount inputs
-st.session_state.labor = st.number_input(
-    "Labor Charges (PKR) - Your Earnings",
-    value=st.session_state.labor,
-    step=500,
-    key="labor_input"
-)
+col1, col2 = st.columns(2)
 
-st.session_state.discount = st.number_input(
-    "Discount (PKR)",
-    value=st.session_state.discount,
-    step=100,
-    key="discount_input"
-)
+with col1:
+    st.session_state.labor = st.number_input(
+        "**Labor Charges (Rs)**",
+        value=st.session_state.labor,
+        min_value=0,
+        step=500,
+        help="Your service charges"
+    )
 
+with col2:
+    st.session_state.discount = st.number_input(
+        "**Discount (Rs)**",
+        value=st.session_state.discount,
+        min_value=0,
+        step=100,
+        help="Any discount for customer"
+    )
+
+# Calculate and display totals
 if st.session_state.repair_items:
-    # Calculate subtotal
-    subtotal = 0
-    for item in st.session_state.repair_items:
-        subtotal += item['total']
-
-    # Calculate total
+    subtotal = sum(item['total'] for item in st.session_state.repair_items)
     total = subtotal + st.session_state.labor - st.session_state.discount
 
-    # Display totals SIMPLY
-    st.markdown(f"""
-    <div class="invoice-box">
-        <h4>Invoice Summary</h4>
-        <p><b>Parts Total:</b> Rs {subtotal:,}</p>
-        <p><b>Labor (Your Earnings):</b> Rs {st.session_state.labor:,}</p>
-        <p><b>Discount:</b> -Rs {st.session_state.discount:,}</p>
-        <h3>TOTAL: Rs {total:,}</h3>
+    st.markdown("""
+    <div class="invoice-card">
+        <h4 style="color: #2E4057; margin-bottom: 1rem;">Invoice Summary</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+            <div><strong>Parts Total:</strong></div>
+            <div style="text-align: right;">Rs {:,}</div>
+            <div><strong>Labor Charges:</strong></div>
+            <div style="text-align: right;">Rs {:,}</div>
+            <div><strong>Discount:</strong></div>
+            <div style="text-align: right; color: #d32f2f;">- Rs {:,}</div>
+            <div style="border-top: 2px solid #E0E0E0; padding-top: 0.5rem; font-size: 1.2em;"><strong>GRAND TOTAL:</strong></div>
+            <div style="border-top: 2px solid #E0E0E0; padding-top: 0.5rem; text-align: right; font-size: 1.2em; color: #FF6B35; font-weight: bold;">Rs {:,}</div>
+        </div>
     </div>
-    """, unsafe_allow_html=True)
+    """.format(subtotal, st.session_state.labor, st.session_state.discount, total), unsafe_allow_html=True)
 else:
-    st.info("Add repair items above to see calculations")
+    st.info("ℹ️ Add repair items above to see invoice calculation")
 
-# 5. GENERATE INVOICE
 st.markdown("---")
-st.subheader("4. Create Invoice")
 
-# Check if we have items
+# 5. GENERATE INVOICE SECTION
+st.markdown('<h3 class="section-header">Generate Invoice</h3>', unsafe_allow_html=True)
+
+# Validation checks
 has_items = len(st.session_state.repair_items) > 0
 has_customer = st.session_state.customer_name.strip() != ""
 has_car = st.session_state.car_details.strip() != ""
 
-generate_button = st.button(
-    "📄 GENERATE INVOICE",
-    type="primary",
-    use_container_width=True,
-    disabled=not has_items,
-    key="generate_btn"
-)
+if not has_items:
+    st.warning("Please add at least one repair item")
+if not has_customer:
+    st.warning("Please enter customer name")
+if not has_car:
+    st.warning("Please enter vehicle details")
 
-if generate_button:
-    # Validate inputs
-    if not has_customer:
-        st.error("Please enter customer name!")
-        st.stop()
+generate_col1, generate_col2 = st.columns([2, 1])
 
-    if not has_car:
-        st.error("Please enter car details!")
-        st.stop()
+with generate_col1:
+    if st.button(
+            "📄 **GENERATE INVOICE PDF**",
+            type="primary",
+            use_container_width=True,
+            disabled=not (has_items and has_customer and has_car),
+            key="generate_main_btn"
+    ):
+        # Calculate totals
+        subtotal = sum(item['total'] for item in st.session_state.repair_items)
+        total = subtotal + st.session_state.labor - st.session_state.discount
 
-    # Calculate totals again for PDF
-    subtotal = 0
-    for item in st.session_state.repair_items:
-        subtotal += item['total']
+        try:
+            # Create invoice data
+            invoice_number = f"INV-{st.session_state.invoice_counter:04d}"
+            invoice_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    total = subtotal + st.session_state.labor - st.session_state.discount
+            invoice_data = {
+                'invoice_number': invoice_number,
+                'customer_name': st.session_state.customer_name,
+                'car_details': st.session_state.car_details,
+                'date': invoice_date,
+                'items': st.session_state.repair_items.copy(),
+                'subtotal': subtotal,
+                'labor': st.session_state.labor,
+                'discount': st.session_state.discount,
+                'grand_total': total,
+                'user_id': USER_ID,
+                'workshop_name': USER_PROFILE['workshop_name']
+            }
 
-    try:
-        # Create invoice data for saving
-        invoice_number = f"INV-{st.session_state.invoice_counter:04d}"
-        invoice_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            # Save invoice data
+            save_invoice_data(invoice_data)
 
-        invoice_data = {
-            'invoice_number': invoice_number,
-            'customer_name': st.session_state.customer_name,
-            'car_details': st.session_state.car_details,
-            'date': invoice_date,
-            'items': st.session_state.repair_items.copy(),
-            'subtotal': subtotal,
-            'labor': st.session_state.labor,
-            'discount': st.session_state.discount,
-            'grand_total': total,
-            'user_id': USER_ID,
-            'workshop_name': USER_PROFILE['workshop_name']
-        }
+            # Create PDF
+            pdf = FPDF()
+            pdf.add_page()
 
-        # Save invoice data for statistics
-        save_invoice_data(invoice_data)
+            # Header
+            pdf.set_font("Arial", 'B', 20)
+            pdf.cell(0, 15, USER_PROFILE['workshop_name'], 0, 1, 'C')
+            pdf.set_font("Arial", '', 12)
+            pdf.cell(0, 8, "Professional Auto Repair Services", 0, 1, 'C')
 
-        # Create PDF with user's profile details
-        pdf = FPDF()
-        pdf.add_page()
+            pdf.ln(10)
 
-        # Header with user's workshop name
-        pdf.set_font("Arial", 'B', 16)
-        pdf.cell(0, 10, f"{USER_PROFILE['workshop_name']}", 0, 1, 'C')
-        pdf.set_font("Arial", 'B', 14)
-        pdf.cell(0, 10, "REPAIR INVOICE", 0, 1, 'C')
+            # Invoice details
+            pdf.set_font("Arial", 'B', 14)
+            pdf.cell(0, 10, "INVOICE", 0, 1, 'L')
+            pdf.set_font("Arial", '', 11)
+            pdf.cell(0, 7, f"Invoice #: {invoice_number}", 0, 1)
+            pdf.cell(0, 7, f"Date: {datetime.datetime.now().strftime('%d/%m/%Y')}", 0, 1)
 
-        pdf.set_font("Arial", '', 12)
-        pdf.cell(0, 10, f"Customer: {st.session_state.customer_name}", 0, 1)
-        pdf.cell(0, 10, f"Car: {st.session_state.car_details}", 0, 1)
-        pdf.cell(0, 10, f"Date: {datetime.datetime.now().strftime('%d/%m/%Y')}", 0, 1)
-        pdf.cell(0, 10, f"Invoice #: {invoice_number}", 0, 1)
+            pdf.ln(5)
 
-        pdf.ln(10)
+            # Customer info
+            pdf.set_font("Arial", 'B', 12)
+            pdf.cell(0, 10, "Customer Details", 0, 1)
+            pdf.set_font("Arial", '', 11)
+            pdf.cell(0, 7, f"Name: {st.session_state.customer_name}", 0, 1)
+            pdf.cell(0, 7, f"Vehicle: {st.session_state.car_details}", 0, 1)
 
-        # Items table header
-        pdf.set_font("Arial", 'B', 12)
-        pdf.cell(100, 10, "Description", 1, 0, 'C')
-        pdf.cell(30, 10, "Qty", 1, 0, 'C')
-        pdf.cell(30, 10, "Price (Rs)", 1, 0, 'C')
-        pdf.cell(30, 10, "Total (Rs)", 1, 1, 'C')
+            pdf.ln(10)
 
-        # Items table rows
-        pdf.set_font("Arial", '', 12)
-        for item in st.session_state.repair_items:
-            desc = item['desc']
-            if len(desc) > 40:
-                desc = desc[:37] + "..."
+            # Items table
+            pdf.set_font("Arial", 'B', 11)
+            pdf.cell(100, 10, "Description", 1, 0, 'C')
+            pdf.cell(25, 10, "Qty", 1, 0, 'C')
+            pdf.cell(30, 10, "Price (Rs)", 1, 0, 'C')
+            pdf.cell(35, 10, "Total (Rs)", 1, 1, 'C')
 
-            pdf.cell(100, 10, desc, 1, 0, 'L')
-            pdf.cell(30, 10, str(item['qty']), 1, 0, 'C')
-            pdf.cell(30, 10, f"{item['price']:,}", 1, 0, 'R')
-            pdf.cell(30, 10, f"{item['total']:,}", 1, 1, 'R')
+            pdf.set_font("Arial", '', 10)
+            for item in st.session_state.repair_items:
+                desc = item['desc']
+                if len(desc) > 40:
+                    desc = desc[:37] + "..."
 
-        pdf.ln(10)
+                pdf.cell(100, 8, desc, 1, 0, 'L')
+                pdf.cell(25, 8, str(item['qty']), 1, 0, 'C')
+                pdf.cell(30, 8, f"{item['price']:,}", 1, 0, 'R')
+                pdf.cell(35, 8, f"{item['total']:,}", 1, 1, 'R')
 
-        # Summary section
-        pdf.set_font("Arial", '', 12)
-        pdf.cell(140, 10, "Subtotal:", 0, 0, 'R')
-        pdf.cell(50, 10, f"Rs {subtotal:,}", 0, 1, 'R')
+            pdf.ln(10)
 
-        if st.session_state.labor > 0:
-            pdf.cell(140, 10, "Labor Charges:", 0, 0, 'R')
-            pdf.cell(50, 10, f"Rs {st.session_state.labor:,}", 0, 1, 'R')
+            # Summary
+            pdf.set_font("Arial", '', 11)
+            pdf.cell(140, 8, "Subtotal:", 0, 0, 'R')
+            pdf.cell(50, 8, f"Rs {subtotal:,}", 0, 1, 'R')
 
-        if st.session_state.discount > 0:
-            pdf.cell(140, 10, "Discount:", 0, 0, 'R')
-            pdf.cell(50, 10, f"- Rs {st.session_state.discount:,}", 0, 1, 'R')
+            if st.session_state.labor > 0:
+                pdf.cell(140, 8, "Labor Charges:", 0, 0, 'R')
+                pdf.cell(50, 8, f"Rs {st.session_state.labor:,}", 0, 1, 'R')
 
-        pdf.set_font("Arial", 'B', 14)
-        pdf.cell(140, 15, "GRAND TOTAL:", 0, 0, 'R')
-        pdf.cell(50, 15, f"Rs {total:,}", 0, 1, 'R')
+            if st.session_state.discount > 0:
+                pdf.cell(140, 8, "Discount:", 0, 0, 'R')
+                pdf.cell(50, 8, f"- Rs {st.session_state.discount:,}", 0, 1, 'R')
 
-        pdf.ln(10)
+            pdf.set_font("Arial", 'B', 13)
+            pdf.cell(140, 12, "GRAND TOTAL:", 0, 0, 'R')
+            pdf.cell(50, 12, f"Rs {total:,}", 0, 1, 'R')
 
-        # Footer with user's contact details
-        pdf.set_font("Arial", 'I', 10)
-        pdf.cell(0, 10, "Thank you for your business!", 0, 1, 'C')
+            pdf.ln(15)
 
-        # Show owner name if set
-        if USER_PROFILE['owner_name']:
-            pdf.cell(0, 10, f"Owner: {USER_PROFILE['owner_name']}", 0, 1, 'C')
+            # Footer
+            pdf.set_font("Arial", 'I', 9)
+            pdf.cell(0, 6, "Thank you for your business!", 0, 1, 'C')
 
-        # Show phone if set
-        if USER_PROFILE['phone_number'] and USER_PROFILE['phone_number'] != '+92-XXX-XXXXXXX':
-            pdf.cell(0, 10, f"Phone: {USER_PROFILE['phone_number']}", 0, 1, 'C')
+            if USER_PROFILE['phone_number'] and USER_PROFILE['phone_number'] != '+92-300-1234567':
+                pdf.cell(0, 6, f"Phone: {USER_PROFILE['phone_number']}", 0, 1, 'C')
 
-        # Show workshop name
-        pdf.cell(0, 10, f"{USER_PROFILE['workshop_name']}", 0, 1, 'C')
+            pdf.cell(0, 6, USER_PROFILE['workshop_name'], 0, 1, 'C')
 
-        # Show address if set
-        if USER_PROFILE['address'] and USER_PROFILE['address'] != 'Your Workshop Address':
-            pdf.set_font("Arial", '', 8)
-            pdf.cell(0, 10, f"Address: {USER_PROFILE['address']}", 0, 1, 'C')
+            if USER_PROFILE['address']:
+                pdf.set_font("Arial", '', 8)
+                pdf.cell(0, 6, f"Address: {USER_PROFILE['address']}", 0, 1, 'C')
 
-        # Show email if set
-        if USER_PROFILE['email']:
-            pdf.set_font("Arial", '', 8)
-            pdf.cell(0, 10, f"Email: {USER_PROFILE['email']}", 0, 1, 'C')
+            # Save PDF
+            user_invoices_dir = get_user_invoices_dir()
+            filename = f"invoice_{invoice_number}.pdf"
+            filepath = os.path.join(user_invoices_dir, filename)
+            pdf.output(filepath)
 
-        # Get user-specific invoices directory
-        user_invoices_dir = get_user_invoices_dir()
+            # Update session state
+            st.session_state.last_invoice_path = filepath
+            st.session_state.last_invoice_data = invoice_data
+            st.session_state.invoice_counter += 1
+            save_user_invoice_counter(st.session_state.invoice_counter)
 
-        # Save PDF
-        filename = f"invoice_{invoice_number}.pdf"
-        filepath = os.path.join(user_invoices_dir, filename)
-        pdf.output(filepath)
+            # Show success
+            st.markdown(f"""
+            <div class="success-box">
+                <h4 style="margin-top: 0;">✅ Invoice Generated Successfully!</h4>
+                <p><strong>Invoice #:</strong> {invoice_number}</p>
+                <p><strong>Customer:</strong> {st.session_state.customer_name}</p>
+                <p><strong>Total Amount:</strong> Rs {total:,}</p>
+            </div>
+            """, unsafe_allow_html=True)
 
-        # Store last invoice info
-        st.session_state.last_invoice_path = filepath
-        st.session_state.last_invoice_data = invoice_data
+            # Download and WhatsApp buttons
+            col1, col2 = st.columns(2)
 
-        # Update invoice counter and save it
-        st.session_state.invoice_counter += 1
-        save_user_invoice_counter(st.session_state.invoice_counter)
+            with col1:
+                with open(filepath, "rb") as f:
+                    st.download_button(
+                        label="📥 **Download PDF**",
+                        data=f,
+                        file_name=filename,
+                        mime="application/pdf",
+                        use_container_width=True,
+                        type="primary"
+                    )
 
-        # Show success message
-        st.success(f"✅ Invoice {invoice_number} created successfully!")
+            with col2:
+                whatsapp_message = create_whatsapp_message(invoice_data)
+                whatsapp_url = f"https://wa.me/?text={whatsapp_message}"
 
-        # Display download and WhatsApp buttons side by side
-        col1, col2 = st.columns(2)
+                st.markdown(f"""
+                <a href="{whatsapp_url}" target="_blank" style="text-decoration: none;">
+                    <button class="whatsapp-btn">
+                        📱 **Send via WhatsApp**
+                    </button>
+                </a>
+                """, unsafe_allow_html=True)
 
-        with col1:
-            with open(filepath, "rb") as f:
-                st.download_button(
-                    label="📥 DOWNLOAD PDF INVOICE",
-                    data=f,
-                    file_name=filename,
-                    mime="application/pdf",
-                    use_container_width=True
+            st.balloons()
+
+        except Exception as e:
+            st.error(f"Error creating invoice: {str(e)}")
+
+with generate_col2:
+    if st.button("🔄 **Reset Form**", use_container_width=True, type="secondary"):
+        st.session_state.repair_items = []
+        st.session_state.customer_name = ""
+        st.session_state.car_details = ""
+        st.session_state.labor = 1500
+        st.session_state.discount = 0
+        st.session_state.new_desc = ""
+        st.session_state.new_qty = 1
+        st.session_state.new_price = 1000
+        st.success("Form reset successfully!")
+        st.rerun()
+
+# ========================
+# SIDEBAR LAYOUT
+# ========================
+
+# SIDEBAR - WORKSHOP PROFILE
+with st.sidebar:
+    st.markdown("""
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <h2 style="color: #2E4057;">🏢 Workshop Profile</h2>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Profile display
+    st.markdown(f"""
+    <div class="profile-card">
+        <h4 style="color: #2E4057; margin-top: 0;">{USER_PROFILE['workshop_name']}</h4>
+        <p>👤 <strong>Owner:</strong> {USER_PROFILE['owner_name']}</p>
+        <p>📞 <strong>Phone:</strong> {USER_PROFILE['phone_number']}</p>
+        <p>📍 <strong>Address:</strong> {USER_PROFILE['address'][:30]}...</p>
+        {f'<p>📧 <strong>Email:</strong> {USER_PROFILE["email"]}</p>' if USER_PROFILE['email'] else ''}
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Edit Profile Button
+    if not st.session_state.show_profile_edit:
+        if st.button("✏️ **Edit Profile**", use_container_width=True, type="secondary"):
+            st.session_state.show_profile_edit = True
+            st.rerun()
+
+    # Profile Edit Form
+    if st.session_state.show_profile_edit:
+        with st.expander("📝 Edit Workshop Details", expanded=True):
+            with st.form("profile_form"):
+                st.write("**Update your workshop information:**")
+
+                workshop_name = st.text_input(
+                    "Workshop Name*",
+                    value=USER_PROFILE['workshop_name']
                 )
 
-        with col2:
-            # Create WhatsApp message link
-            whatsapp_message = create_whatsapp_message(invoice_data)
-            whatsapp_url = f"https://wa.me/?text={whatsapp_message}"
+                owner_name = st.text_input(
+                    "Owner Name",
+                    value=USER_PROFILE['owner_name']
+                )
 
-            st.markdown(f"""
-            <a href="{whatsapp_url}" target="_blank" style="text-decoration: none;">
-                <button class="whatsapp-btn" style="width: 100%;">
-                    📱 SEND TO WHATSAPP
-                </button>
-            </a>
-            """, unsafe_allow_html=True)
-            st.caption("Note: You'll need to attach the PDF manually in WhatsApp")
+                phone_number = st.text_input(
+                    "Phone Number*",
+                    value=USER_PROFILE['phone_number']
+                )
 
-        # Show invoice summary
-        st.markdown(f"""
-        <div class="invoice-box">
-            <h4>Invoice Details</h4>
-            <p><b>Invoice #:</b> {invoice_number}</p>
-            <p><b>Customer:</b> {st.session_state.customer_name}</p>
-            <p><b>Car:</b> {st.session_state.car_details}</p>
-            <p><b>Workshop:</b> {USER_PROFILE['workshop_name']}</p>
-            <p><b>Your Earnings (Labor):</b> Rs {st.session_state.labor:,}</p>
-            <p><b>Total Items:</b> {len(st.session_state.repair_items)}</p>
-            <p><b>Grand Total:</b> Rs {total:,}</p>
-        </div>
-        """, unsafe_allow_html=True)
+                address = st.text_area(
+                    "Address",
+                    value=USER_PROFILE['address']
+                )
 
-        st.balloons()
+                email = st.text_input(
+                    "Email",
+                    value=USER_PROFILE['email']
+                )
 
-    except Exception as e:
-        st.error(f"Error creating invoice: {str(e)}")
+                col1, col2 = st.columns(2)
+                with col1:
+                    save = st.form_submit_button("💾 **Save**", type="primary")
+                with col2:
+                    cancel = st.form_submit_button("❌ **Cancel**")
 
-# ========================
-# SIDEBAR WITH REAL STATISTICS AND PROFILE EDITING
-# ========================
+                if save:
+                    if workshop_name.strip() and phone_number.strip():
+                        new_profile = {
+                            'workshop_name': workshop_name,
+                            'owner_name': owner_name,
+                            'phone_number': phone_number,
+                            'address': address,
+                            'email': email,
+                            'website': USER_PROFILE.get('website', ''),
+                            'tax_rate': USER_PROFILE.get('tax_rate', 0),
+                            'currency': USER_PROFILE.get('currency', 'PKR')
+                        }
+                        save_user_profile(new_profile)
+                        st.session_state.show_profile_edit = False
+                        st.success("✅ Profile updated!")
+                        st.rerun()
+                    else:
+                        st.error("Workshop name and phone number are required!")
 
-# SIDEBAR - USER PROFILE SECTION
-st.sidebar.markdown("---")
-st.sidebar.subheader("👤 Workshop Profile")
-
-# Display current profile info
-st.sidebar.markdown(f"""
-<div class="profile-section">
-    <div class="profile-header">
-        <strong>{USER_PROFILE['workshop_name']}</strong>
-        {"" if st.session_state.show_profile_edit else "✏️"}
-    </div>
-    <p><strong>Owner:</strong> {USER_PROFILE['owner_name'] or 'Not set'}</p>
-    <p><strong>Phone:</strong> {USER_PROFILE['phone_number']}</p>
-    <p><strong>Address:</strong> {USER_PROFILE['address'][:30]}...</p>
-    {f'<p><strong>Email:</strong> {USER_PROFILE["email"]}</p>' if USER_PROFILE['email'] else ''}
-</div>
-""", unsafe_allow_html=True)
-
-# Edit Profile Button
-if not st.session_state.show_profile_edit:
-    if st.sidebar.button("✏️ Edit Profile", use_container_width=True, type="secondary"):
-        st.session_state.show_profile_edit = True
-        st.rerun()
-
-# PROFILE EDITING SECTION (Expandable in sidebar)
-if st.session_state.show_profile_edit:
-    with st.sidebar.expander("📝 Edit Workshop Details", expanded=True):
-        st.write("**Update your workshop information:**")
-
-        # Profile edit form
-        with st.form("profile_edit_form"):
-            workshop_name = st.text_input(
-                "Workshop Name*",
-                value=USER_PROFILE['workshop_name'],
-                help="This appears on invoices"
-            )
-
-            owner_name = st.text_input(
-                "Owner Name",
-                value=USER_PROFILE['owner_name'],
-                placeholder="Ali Ahmed",
-                help="Your name (optional)"
-            )
-
-            phone_number = st.text_input(
-                "Phone Number*",
-                value=USER_PROFILE['phone_number'],
-                placeholder="+92-300-1234567",
-                help="Customer contact number"
-            )
-
-            address = st.text_area(
-                "Workshop Address",
-                value=USER_PROFILE['address'],
-                placeholder="Shop #123, Main Road, City",
-                help="Your workshop location"
-            )
-
-            email = st.text_input(
-                "Email (Optional)",
-                value=USER_PROFILE['email'],
-                placeholder="workshop@email.com"
-            )
-
-            website = st.text_input(
-                "Website (Optional)",
-                value=USER_PROFILE['website'],
-                placeholder="www.yourworkshop.com"
-            )
-
-            logo_text = st.text_input(
-                "Logo Text",
-                value=USER_PROFILE['logo_text'],
-                placeholder="🔧 YOUR WORKSHOP",
-                help="Text shown in top-left corner"
-            )
-
-            # Form buttons
-            col1, col2 = st.columns(2)
-            with col1:
-                save_profile = st.form_submit_button("💾 Save", type="primary")
-            with col2:
-                cancel_profile = st.form_submit_button("❌ Cancel")
-
-            if save_profile:
-                if not workshop_name.strip() or not phone_number.strip():
-                    st.error("Workshop Name and Phone Number are required!")
-                else:
-                    # Update profile
-                    new_profile = {
-                        'workshop_name': workshop_name,
-                        'owner_name': owner_name,
-                        'phone_number': phone_number,
-                        'address': address,
-                        'email': email,
-                        'website': website,
-                        'logo_text': logo_text
-                    }
-
-                    # Save to file
-                    save_user_profile(new_profile)
-
-                    # Update session state
+                if cancel:
                     st.session_state.show_profile_edit = False
-
-                    # Show success message in sidebar
-                    st.success("✅ Profile updated!")
-                    st.info("Refreshing page...")
                     st.rerun()
 
-            if cancel_profile:
-                st.session_state.show_profile_edit = False
-                st.rerun()
+    st.markdown("---")
 
-st.sidebar.markdown("---")
+    # SIDEBAR - TODAY'S STATISTICS
+    st.markdown("""
+    <div style="text-align: center;">
+        <h3 style="color: #2E4057;">📊 Today's Summary</h3>
+    </div>
+    """, unsafe_allow_html=True)
 
-# SIDEBAR - TODAY'S WORK STATISTICS
-st.sidebar.title("📊 Today's Work")
+    # Stats cards
+    st.markdown(f"""
+    <div class="stat-card">
+        <h4 style="margin:0; color:white;">Invoices Today</h4>
+        <h2 style="margin:5px 0; color:white;">{today_stats['invoices_today']}</h2>
+        <small>Generated today</small>
+    </div>
+    """, unsafe_allow_html=True)
 
-# Get real-time statistics for current user
-today_stats = get_today_statistics()
-all_time_stats = get_all_time_statistics()
+    st.markdown(f"""
+    <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+        <h4 style="margin:0; color:white;">Your Earnings</h4>
+        <h2 style="margin:5px 0; color:white;">Rs {today_stats['earnings_today']:,.0f}</h2>
+        <small>Labor charges only</small>
+    </div>
+    """, unsafe_allow_html=True)
 
-# Today's Statistics Cards
-st.sidebar.markdown(f"""
-<div class="stat-card">
-    <h4 style="margin:0; color:white;">Your Invoices Today</h4>
-    <h2 style="margin:5px 0; color:white;">{today_stats['invoices_today']}</h2>
-    <small>Generated today by you</small>
-</div>
-""", unsafe_allow_html=True)
+    st.markdown("---")
 
-st.sidebar.markdown(f"""
-<div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-    <h4 style="margin:0; color:white;">Your Earnings (Labor)</h4>
-    <h2 style="margin:5px 0; color:white;">Rs {today_stats['earnings_today']:,.0f}</h2>
-    <small>From {today_stats['invoices_today']} invoices</small>
-</div>
-""", unsafe_allow_html=True)
+    # SIDEBAR - QUICK ACTIONS
+    st.markdown("""
+    <div style="text-align: center;">
+        <h3 style="color: #2E4057;">⚡ Quick Actions</h3>
+    </div>
+    """, unsafe_allow_html=True)
 
-# Additional metrics
-col1, col2 = st.sidebar.columns(2)
-with col1:
-    if today_stats['invoices_today'] > 0:
-        avg_labor = today_stats['total_labor'] / today_stats['invoices_today']
-        st.metric("Avg. Labor", f"Rs {avg_labor:,.0f}")
-    else:
-        st.metric("Avg. Labor", "Rs 0")
+    if st.button("📋 **View Report**", use_container_width=True):
+        with st.expander("📈 Today's Report"):
+            st.write(f"**Invoices:** {today_stats['invoices_today']}")
+            st.write(f"**Earnings:** Rs {today_stats['earnings_today']:,}")
+            st.write(f"**Total Sales:** Rs {today_stats['total_sales_today']:,}")
+            st.write(f"**Items Sold:** {today_stats['items_sold']}")
 
-with col2:
-    st.metric("Total Sales", f"Rs {today_stats['total_sales_today']:,.0f}")
+    if st.button("🗑️ **Clear Today's Data**", use_container_width=True):
+        today = datetime.datetime.now().strftime("%Y-%m-%d")
+        user_data_dir = get_user_data_dir()
+        data_file = f"{user_data_dir}/invoices_{today}.json"
+        if os.path.exists(data_file):
+            os.remove(data_file)
+            st.success("Today's data cleared!")
+            st.rerun()
 
-st.sidebar.markdown("---")
+    st.markdown("---")
 
-# SIDEBAR - RECENT INVOICES
-st.sidebar.subheader("📋 Your Recent Invoices")
+    # SIDEBAR - CURRENT WORK
+    st.markdown("""
+    <div style="text-align: center;">
+        <h3 style="color: #2E4057;">🛠️ Current Work</h3>
+    </div>
+    """, unsafe_allow_html=True)
 
-recent_invoices = today_stats.get('recent_invoices', [])
+    st.markdown(f"""
+    <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+        <p><strong>Next Invoice #:</strong> INV-{st.session_state.invoice_counter:04d}</p>
+        <p><strong>Items in Cart:</strong> {len(st.session_state.repair_items)}</p>
+        {f'<p><strong>Customer:</strong> {st.session_state.customer_name[:20]}</p>' if st.session_state.customer_name else '<p><strong>Customer:</strong> None</p>'}
+    </div>
+    """, unsafe_allow_html=True)
 
-if recent_invoices:
-    for inv in reversed(recent_invoices[-3:]):
-        if isinstance(inv, dict):
-            with st.sidebar.expander(
-                    f"{inv.get('invoice_number', 'N/A')} - {inv.get('customer_name', 'Unknown')[:15]}..."):
-                st.write(f"**Car:** {inv.get('car_details', 'N/A')[:20]}")
-                st.write(f"**Total:** Rs {inv.get('grand_total', 0):,}")
-                st.write(f"**Labor:** Rs {inv.get('labor', 0):,}")
-                date_str = inv.get('date', '')
-                if date_str:
-                    time_part = date_str.split()[1][:5] if ' ' in date_str else ''
-                    st.write(f"**Time:** {time_part}")
-else:
-    st.sidebar.info("No invoices today")
+    st.markdown("---")
 
-st.sidebar.markdown("---")
-
-# SIDEBAR - ALL TIME STATISTICS
-st.sidebar.subheader("📈 Your All Time Stats")
-col1, col2 = st.sidebar.columns(2)
-with col1:
-    st.metric("Your Invoices", all_time_stats['total_invoices'])
-with col2:
-    st.metric("Your Earnings", f"Rs {all_time_stats['total_earnings']:,.0f}")
-
-st.sidebar.write(f"**Total Sales:** Rs {all_time_stats['total_sales']:,.0f}")
-st.sidebar.write(f"**Active Days:** {all_time_stats['days_active']}")
-if all_time_stats['days_active'] > 0:
-    st.sidebar.write(f"**Avg. Daily Earnings:** Rs {all_time_stats['average_daily']:,.0f}")
-else:
-    st.sidebar.write(f"**Avg. Daily Earnings:** Rs 0")
-
-st.sidebar.markdown("---")
-
-# SIDEBAR - QUICK ACTIONS
-st.sidebar.title("⚡ Quick Actions")
-if st.sidebar.button("🔄 Clear Current Invoice", use_container_width=True):
-    st.session_state.repair_items = []
-    st.session_state.customer_name = ""
-    st.session_state.car_details = ""
-    st.session_state.labor = 1500
-    st.session_state.discount = 0
-    st.rerun()
-
-if st.sidebar.button("📊 View Your Report", use_container_width=True):
-    with st.sidebar:
-        st.info(f"**Your Today's Report**")
-        st.write(f"- Invoices: {today_stats['invoices_today']}")
-        st.write(f"- Your Earnings (Labor): Rs {today_stats['earnings_today']:,}")
-        st.write(f"- Total Sales: Rs {today_stats['total_sales_today']:,}")
-        st.write(f"- Items Sold: {today_stats['items_sold']}")
-
-if st.sidebar.button("🧹 Clear Your Today's Data", use_container_width=True):
-    today = datetime.datetime.now().strftime("%Y-%m-%d")
-    user_data_dir = get_user_data_dir()
-    data_file = f"{user_data_dir}/invoices_{today}.json"
-    if os.path.exists(data_file):
-        os.remove(data_file)
-        st.sidebar.success("Your today's data cleared!")
-        st.rerun()
-
-# SIDEBAR - CURRENT WORK STATUS
-st.sidebar.markdown("---")
-st.sidebar.subheader("🛠️ Current Work")
-st.sidebar.write(f"**Workshop:** {USER_PROFILE['workshop_name'][:20]}")
-st.sidebar.write(f"**Next Invoice #:** INV-{st.session_state.invoice_counter:04d}")
-st.sidebar.write(f"**Items in Cart:** {len(st.session_state.repair_items)}")
-if st.session_state.customer_name:
-    st.sidebar.write(f"**Customer:** {st.session_state.customer_name[:20]}")
-else:
-    st.sidebar.write(f"**Customer:** None")
-
-# Footer note about multi-user support
-st.sidebar.markdown("---")
-st.sidebar.caption("🔒 **Note:** Your data is stored separately from other users. Each user has their own workspace.")
+    # Footer
+    st.markdown("""
+    <div style="text-align: center; color: #666; font-size: 0.8rem; padding: 1rem;">
+        <p>🔒 <strong>AutoInvoice Pro</strong></p>
+        <p>v1.0 • Professional Billing System</p>
+    </div>
+    """, unsafe_allow_html=True)
